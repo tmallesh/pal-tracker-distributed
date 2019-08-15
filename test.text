@@ -1,0 +1,212 @@
+9a3243c8022af7d3a7b6caa7a120cb5de838f553
+
+
+git status
+git add -N .
+git add -p
+git commit -m ""
+git push
+
+
+
+curl -i -XPOST -H"Content-Type: application/json" https://pal-tracker-rajitha.apps.evans.pal.pivotal.io/time-entries -d"{\"projectId\": 1, \"userId\": 2, \"date\": \"2019-01-01\", \"hours\": 8}"
+
+
+
+curl -i -XPOST -H"Content-Type: application/json" https://pal-tracker-rajitha.apps.evans.pal.pivotal.io/time-entries -d"{\"projectId\": 1, \"userId\": 2, \"date\": \"2019-01-02\", \"hours\": 12}"
+
+
+--
+
+curl -i -XPOST -H"Content-Type: application/json" http://localhost:8080/time-entries -d"{\"projectId\": 1, \"userId\": 2, \"date\": \"2019-01-01\", \"hours\": 8}"
+
+curl -i -XPOST -H"Content-Type: application/json" http://localhost:8080/time-entries -d"{\"projectId\": 1, \"userId\": 2, \"date\": \"2019-01-02\", \"hours\": 12}"
+
+
+----
+
+./gradlew applications:allocations-server:bootRun
+./gradlew applications:backlog-server:bootRun
+./gradlew applications:registration-server:bootRun
+./gradlew applications:timesheets-server:bootRun
+
+
+--
+
+curl -i -XPOST -H"Content-Type: application/json" localhost:8083/registration -d'{"name": "Pete"}'
+curl -i localhost:8083/users/1
+
+curl -i -XPOST -H"Content-Type: application/json" localhost:8083/projects -d"{\"name\": \"Basket Weaving\", \"accountId\": 1}"
+curl -i localhost:8083/projects?accountId=1
+
+curl -i -XPOST -H"Content-Type: application/json" localhost:8081/allocations -d"{\"projectId\": 1, \"userId\": 1, \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+curl -i localhost:8081/allocations?projectId=1
+
+curl -i -XPOST -H"Content-Type: application/json" localhost:8082/stories -d"{\"projectId\": 1, \"name\": \"Find some reeds\"}"
+curl -i localhost:8082/stories?projectId=1
+
+curl -i -XPOST -H"Content-Type: application/json" localhost:8084/time-entries/ -d"{\"projectId\": 1, \"userId\": 1, \"date\": \"2015-05-17\", \"hours\": 12}"
+curl -i localhost:8084/time-entries?userId=1
+
+--
+
+./gradlew cloudNativeDeveloperDistributedSystemDeployment \
+    -PregistrationServerUrl=https://registration-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PbacklogServerUrl=https://backlog-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PallocationsServerUrl=https://allocations-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PtimesheetsServerUrl=https://timesheets-pal-thejesh-henry.apps.evans.pal.pivotal.io 
+
+
+==================================================
+
+curl https://spring-cloud-broker.apps.evans.pal.pivotal.io/actuator/info
+
+This is the version of the Spring Cloud Services Tile or SCS Tile running on your Cloud Foundry foundation:
+version	"2.0.8-build.5"
+artifact	"spring-cloud-service-broker"
+name	"service-broker"
+group	"io.pivotal.spring.cloud"
+time	"2019-05-03T15:52:33.869Z"
+
+
+springBootVersion = "2.0.6.RELEASE"
+
+
+SCS Tile 	SCS Client Starters 	Spring Boot 		Spring Cloud
+2.0.x 		2.0.x 			2.0.x (not 2.1.x) 	Finchley.x
+
+
+./gradlew cloudNativeDeveloperDistributedSystemWithServiceDiscovery \
+    -PregistrationServerUrl=https://registration-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PbacklogServerUrl=https://backlog-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PallocationsServerUrl=https://allocations-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PtimesheetsServerUrl=https://timesheets-pal-thejesh-henry.apps.evans.pal.pivotal.io
+
+
+---
+
+08/15:
+
+curl -i -XPOST -H"Content-Type: application/json" https://registration-pal-thejesh-henry.apps.evans.pal.pivotal.io/registration -d'{"name": "Pete"}'
+curl -i https://registration-pal-thejesh-henry.apps.evans.pal.pivotal.io/accounts?ownerId=3
+
+curl -i -XPOST -H"Content-Type: application/json" https://backlog-pal-thejesh-henry.apps.evans.pal.pivotal.io/projects -d"{\"name\": \"Project A\", \"accountId\": \"3\"}"
+curl -i -XPOST -H"Content-Type: application/json" https://backlog-pal-thejesh-henry.apps.evans.pal.pivotal.io -d"{\"name\": \"Project B\", \"accountId\": \"2\"}"
+
+curl -i -XPOST -H"Content-Type: application/json" https://allocations-pal-thejesh-henry.apps.evans.pal.pivotal.io/allocations/ -d"{\"projectId\": \"2\", \"userId\": \"3\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+
+--
+
+curl -i -XPOST -H"Content-Type: application/json" https://allocations-pal-thejesh-henry.apps.evans.pal.pivotal.io/allocations/ -d"{\"projectId\": \"3\", \"userId\": \"3\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+
+curl -i -XPOST -H"Content-Type: application/json" https://allocations-pal-thejesh-henry.apps.evans.pal.pivotal.io/allocations/ -d"{\"projectId\": \"2\", \"userId\": \"3\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+
+
+
+./gradlew cloudNativeDeveloperDistributedSystemWithCircuitBreaker \
+    -PregistrationServerUrl=https://registration-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PbacklogServerUrl=https://backlog-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PallocationsServerUrl=https://allocations-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PtimesheetsServerUrl=https://timesheets-pal-thejesh-henry.apps.evans.pal.pivotal.io
+
+===========================================
+
+OAuth2:
+-------
+
+curl 'http://localhost:8999/oauth/token' -i -u 'tracker-client:supersecret' -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token&token_format=opaque'
+
+curl localhost:8083 -H"Authorization: Bearer ec47cdaa-ccc6-4fcf-8a57-522e274e6de8"
+
+
+  "p-identity": [
+   {
+    "binding_name": null,
+    "credentials": {
+     "auth_domain": "https://login.sys.evans.pal.pivotal.io",
+     "client_id": "1d9d2ba5-4a7d-4f32-92b7-1fdb064077a4",
+     "client_secret": "58532061-99e5-48f2-a308-85078adc8a81"
+    },
+    "instance_name": "tracker-sso",
+    "label": "p-identity",
+    "name": "tracker-sso",
+    "plan": "uaa",
+    "provider": null,
+    "syslog_drain_url": null,
+    "tags": [],
+    "volume_mounts": []
+   }
+  ],
+
+
+curl -k "https://login.sys.evans.pal.pivotal.io/oauth/token" -i -u "1d9d2ba5-4a7d-4f32-92b7-1fdb064077a4:58532061-99e5-48f2-a308-85078adc8a81" -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
+
+
+{"access_token":"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vdWFhLnN5cy5ldmFucy5wYWwucGl2b3RhbC5pby90b2tlbl9rZXlzIiwia2lkIjoia2V5LTEiLCJ0eXAiOiJKV1QifQ.eyJqdGkiOiI5NzZjY2NjMGY4MTY0ZTJjYTk3MTI5MTgxNWM0ZTIwMiIsInN1YiI6IjFkOWQyYmE1LTRhN2QtNGYzMi05MmI3LTFmZGIwNjQwNzdhNCIsImF1dGhvcml0aWVzIjpbInVhYS5yZXNvdXJjZSJdLCJzY29wZSI6WyJ1YWEucmVzb3VyY2UiXSwiY2xpZW50X2lkIjoiMWQ5ZDJiYTUtNGE3ZC00ZjMyLTkyYjctMWZkYjA2NDA3N2E0IiwiY2lkIjoiMWQ5ZDJiYTUtNGE3ZC00ZjMyLTkyYjctMWZkYjA2NDA3N2E0IiwiYXpwIjoiMWQ5ZDJiYTUtNGE3ZC00ZjMyLTkyYjctMWZkYjA2NDA3N2E0IiwiZ3JhbnRfdHlwZSI6ImNsaWVudF9jcmVkZW50aWFscyIsInJldl9zaWciOiI4MjZiZGJiIiwiaWF0IjoxNTY1ODkxMTQwLCJleHAiOjE1NjU5MzQzNDAsImlzcyI6Imh0dHBzOi8vdWFhLnN5cy5ldmFucy5wYWwucGl2b3RhbC5pby9vYXV0aC90b2tlbiIsInppZCI6InVhYSIsImF1ZCI6WyIxZDlkMmJhNS00YTdkLTRmMzItOTJiNy0xZmRiMDY0MDc3YTQiLCJ1YWEiXX0.0PFXbm4OPwsGUva0_kFOWG7lJ_ebmwzBWi0MoL1P-L23amC1_vDvUGCD_Nyr7ZRc5aDtTUbeWI4z1XSu1zIDS1kFvfG6WLjfy3Z05NkrNwRCtqK3uxjs7lawjXPobOHJbeX4AMwVGmM4u65RSwiF0P8AtA3forOUPmQQX47HSRSLB597JEBfzQvoIVds8_40b2rEKqJ4V68gJi3KWLMdOua0LcOXPRgZMrwZyXKiaZckNgjt8801_DVikyJ0RWz6G5kYNmqm-LbT26jaXtrmQXoaYeY9EVMxa1eJykzU7GCh7T5OJJ0jr54WL-CRMnfJCQ4tvnZ74c3yJg_UCRNsSQ","token_type":"bearer","expires_in":43199,"scope":"uaa.resource","jti":"976cccc0f8164e2ca971291815c4e202"}
+
+./gradlew cloudNativeDeveloperDistributedSystemWithSecurity \
+    -PuaaUrl=https://login.sys.evans.pal.pivotal.io \
+    -PclientId=1d9d2ba5-4a7d-4f32-92b7-1fdb064077a4 \
+    -PclientSecret=58532061-99e5-48f2-a308-85078adc8a81 \
+    -PregistrationServerUrl=https://registration-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PbacklogServerUrl=https://backlog-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PallocationsServerUrl=https://allocations-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PtimesheetsServerUrl=https://timesheets-pal-thejesh-henry.apps.evans.pal.pivotal.io
+
+--
+
+config server:
+-------------
+
+git remote add origin https://github.com/tmallesh/tracker-config.git
+
+cf create-service p-config-server standard tracker-config-server \
+-c "{\"git\": {\"uri\": \"https://github.com/tmallesh/tracker-config.git\", \"label\": \"master\"}}"
+
+
+
+
+./gradlew cloudNativeDeveloperDistributedSystemWithConfigServer \
+    -PuaaUrl=https://${UAA_ENDPOINT} \
+    -PclientId=${UAA_CLIENT_ID} \
+    -PclientSecret=${UAA_CLIENT_SECRET} \
+    -PregistrationServerUrl=https://${REGISTRATION_APP_URL} \
+    -PbacklogServerUrl=https://${BACKLOG_APP_URL} \
+    -PallocationsServerUrl=https://${ALLOCATIONS_APP_URL} \
+    -PtimesheetsServerUrl=https://${TIMESHEETS_APP_URL}
+
+./gradlew cloudNativeDeveloperDistributedSystemWithConfigServer \
+    -PuaaUrl=https://login.sys.evans.pal.pivotal.io \
+    -PclientId=1d9d2ba5-4a7d-4f32-92b7-1fdb064077a4 \
+    -PclientSecret=58532061-99e5-48f2-a308-85078adc8a81 \
+    -PregistrationServerUrl=https://registration-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PbacklogServerUrl=https://backlog-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PallocationsServerUrl=https://allocations-pal-thejesh-henry.apps.evans.pal.pivotal.io \
+    -PtimesheetsServerUrl=https://timesheets-pal-thejesh-henry.apps.evans.pal.pivotal.io
+
+
+
+
+INFO:
+https://slack.com/signin
+palexternal.slack.com
+thejesh@gmail.com / P__x%
+
+Hi Thejesh Mallesh, welcome to Voya. The below information will be useful throughout the course to access materials and infrastructure. View discussion about your course in #bostonma-aug-2019-cnd.Cohort ID: 349803240PCF Foundation API: api.sys.evans.pal.pivotal.io
+PCF Org: thejesh.gmail.com
+
+
+
+https://courses.education.pivotal.io/c/349803240/
+https://travis-ci.org/tmallesh/pal-tracker-distributed
+
+http://api.sys.evans.pal.pivotal.io/
+https://uaa.sys.evans.pal.pivotal.io/login
+
+
+
+
+
+
+
+
